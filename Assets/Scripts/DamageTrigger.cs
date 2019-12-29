@@ -11,7 +11,16 @@ public class DamageTrigger : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag=="Enemy")
-            character.damage(20f);
+        string type = character.GetType().Name;
+        if (type.Equals("Player"))
+        {
+            if (collision.gameObject.tag == "Enemy")
+                character.damage(20f);
+        }
+        if (type.Equals("Enemy"))
+        {
+            if (collision.gameObject.tag == "Player")
+                character.damage(20f);
+        }
     }
 }

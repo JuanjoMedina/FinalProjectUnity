@@ -46,6 +46,7 @@ public class Player : Character
     public override void damage(float damage)
     {
         health -= damage;
+        animator.SetTrigger("Damage");
     }
     private void inputPC()
     {
