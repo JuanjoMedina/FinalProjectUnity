@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Player : Character
 {
+    public GameObject ammo;
+
     private float health;
     private Animator animator;
     private BoxCollider2D BoxCollider2D;
@@ -11,6 +13,8 @@ public class Player : Character
     private bool jetpack;
     private bool walking;
     private bool dead;
+
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -31,7 +35,13 @@ public class Player : Character
             checkIfDead();
         }
 
-
+    }
+    private void Update()
+    {
+        if (!dead)
+        {
+            triggerFire();
+        }
 
     }
     private void OnTriggerStay2D(Collider2D collision)
@@ -78,9 +88,27 @@ public class Player : Character
             this.transform.localScale = new Vector2(0.1f, 0.1f);
 
         }
+
         if (!walking && animator.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
             animator.SetTrigger("Stop_Walking");
     }
+    private void triggerFire()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (!jetpack)
+            {
+                animator.SetTrigger("Shoot");
+            }
+            Vector3 pos = transform.position;
+            pos.x += 0.5f;
+            GameObject AmoFired = Instantiate(ammo, pos, Quaternion.identity);
+            Rigidbody2D rigidbody = AmoFired.GetComponent<Rigidbody2D>();
+            rigidbody.AddForce(new Vector2(rigidbody.mass*10, 0), ForceMode2D.Impulse);
+
+        }
+    }
+
     private void checkIfDead()
     {
         if (health <= 0)
