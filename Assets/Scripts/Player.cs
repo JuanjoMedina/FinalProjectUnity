@@ -72,6 +72,8 @@ public class Player : Character
             if (!jetpack)
             {
                 animator.SetTrigger("Walk");
+                animator.SetBool("Jetpack_Start", false);
+                animator.SetBool("Jetpack_Stop", false);
                 walking = true;
             }
             this.Rigidbody.AddRelativeForce(new Vector2(Rigidbody.mass * 9.81f * -0.6f, 0), ForceMode2D.Force);
@@ -82,6 +84,8 @@ public class Player : Character
             if (!jetpack)
             {
                 animator.SetTrigger("Walk");
+                animator.SetBool("Jetpack_Start", false);
+                animator.SetBool("Jetpack_Stop", false);
                 walking = true;
             }
             this.Rigidbody.AddRelativeForce(new Vector2(Rigidbody.mass * 9.81f * 0.6f, 0), ForceMode2D.Force);
@@ -100,11 +104,26 @@ public class Player : Character
             {
                 animator.SetTrigger("Shoot");
             }
-            Vector3 pos = transform.position;
-            pos.x += 0.5f;
-            GameObject AmoFired = Instantiate(ammo, pos, Quaternion.identity);
-            Rigidbody2D rigidbody = AmoFired.GetComponent<Rigidbody2D>();
-            rigidbody.AddForce(new Vector2(rigidbody.mass*10, 0), ForceMode2D.Impulse);
+
+            if (transform.localScale.x < 0)
+            {
+                Vector3 pos = transform.position;
+                pos.x -= 0.5f;
+                GameObject AmoFired = Instantiate(ammo, pos, Quaternion.identity);
+                Rigidbody2D rigidbody = AmoFired.GetComponent<Rigidbody2D>();
+                AmoFired.transform.localScale = new Vector3(AmoFired.transform.localScale.x * -1, AmoFired.transform.localScale.y, transform.localScale.z);
+                rigidbody.velocity = Rigidbody.velocity;
+                rigidbody.AddForce(new Vector2(-rigidbody.mass * 3f, 0), ForceMode2D.Impulse);
+            }
+            else
+            {
+                Vector3 pos = transform.position;
+                pos.x += 0.5f;
+                GameObject AmoFired = Instantiate(ammo, pos, Quaternion.identity);
+                Rigidbody2D rigidbody = AmoFired.GetComponent<Rigidbody2D>();
+                rigidbody.velocity = Rigidbody.velocity;
+                rigidbody.AddForce(new Vector2(rigidbody.mass * 3f, 0), ForceMode2D.Impulse);
+            }
 
         }
     }
