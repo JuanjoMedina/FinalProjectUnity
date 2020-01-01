@@ -77,7 +77,7 @@ public class Player : Character
                 walking = true;
             }
             this.Rigidbody.AddRelativeForce(new Vector2(Rigidbody.mass * 9.81f * -0.6f, 0), ForceMode2D.Force);
-            this.transform.localScale = new Vector2(-0.1f, 0.1f);
+            this.transform.localScale = new Vector2(-0.14f, 0.14f);
         }
         if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
@@ -89,7 +89,7 @@ public class Player : Character
                 walking = true;
             }
             this.Rigidbody.AddRelativeForce(new Vector2(Rigidbody.mass * 9.81f * 0.6f, 0), ForceMode2D.Force);
-            this.transform.localScale = new Vector2(0.1f, 0.1f);
+            this.transform.localScale = new Vector2(0.14f, 0.14f);
 
         }
 
