@@ -21,7 +21,7 @@ public class Turret : Character
     {
         checkIfDead();
     }
-    public override void damage(float damage)
+    public override void Damage(float damage)
     {
         health -= 20;
     }

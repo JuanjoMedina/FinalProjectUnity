@@ -4,9 +4,19 @@ using UnityEngine;
 
 public class Camera : MonoBehaviour
 {
-
+    private static Camera instance;
     public GameObject player;
-    // Start is called before the first frame update
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+            Destroy(gameObject);
+    }
     void Start()
     {
         this.transform.position = player.transform.position;
@@ -15,6 +25,7 @@ public class Camera : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        this.transform.position = player.transform.position;
+        Vector3 pos = new Vector3(player.transform.position.x, player.transform.position.y, -30);
+        this.transform.position = pos;
     }
 }

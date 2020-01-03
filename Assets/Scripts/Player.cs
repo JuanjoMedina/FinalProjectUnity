@@ -1,9 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : Character
 {
+    private static Player player;
+    private Vector3 lastCheckpoint;
+    private float reloadTime;
+
     public GameObject ammo;
 
     private float health;
@@ -18,12 +23,27 @@ public class Player : Character
     // Start is called before the first frame update
     void Awake()
     {
-        health = 100f;
-        jetpack = false;
-        dead = false;
+        if (player == null)
+        {
+            player = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+            Destroy(gameObject);
+
         this.Rigidbody = GetComponent<Rigidbody2D>();
         this.BoxCollider2D = GetComponent<BoxCollider2D>();
         this.animator = GetComponent<Animator>();
+        lastCheckpoint = transform.position;
+    }
+
+    void Start()
+    {
+        health = 100f;
+        dead = false;
+        jetpack = false;
+        this.transform.position = lastCheckpoint;
+        reloadTime = 0;
     }
 
     // Update is called once per frame
@@ -43,6 +63,19 @@ public class Player : Character
             triggerFire();
         }
 
+        if (player.dead)
+        {
+            reloadTime += Time.deltaTime;
+            if (reloadTime >=3f)
+            {
+                reloadTime = 0;
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                Start();
+                animator.SetBool("Damage", false);
+                animator.SetTrigger("Resurrect");
+            }
+        }
+
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
@@ -53,7 +86,7 @@ public class Player : Character
         }
     }
 
-    public override void damage(float damage)
+    public override void Damage(float damage)
     {
         health -= damage;
         animator.SetTrigger("Damage");
@@ -113,7 +146,7 @@ public class Player : Character
                 Rigidbody2D rigidbody = AmoFired.GetComponent<Rigidbody2D>();
                 AmoFired.transform.localScale = new Vector3(AmoFired.transform.localScale.x * -1, AmoFired.transform.localScale.y, transform.localScale.z);
                 rigidbody.velocity = Rigidbody.velocity;
-                rigidbody.AddForce(new Vector2(-rigidbody.mass * 3f, 0), ForceMode2D.Impulse);
+                rigidbody.AddForce(new Vector2(-rigidbody.mass * 10f, 0), ForceMode2D.Impulse);
             }
             else
             {
@@ -122,7 +155,7 @@ public class Player : Character
                 GameObject AmoFired = Instantiate(ammo, pos, Quaternion.identity);
                 Rigidbody2D rigidbody = AmoFired.GetComponent<Rigidbody2D>();
                 rigidbody.velocity = Rigidbody.velocity;
-                rigidbody.AddForce(new Vector2(rigidbody.mass * 3f, 0), ForceMode2D.Impulse);
+                rigidbody.AddForce(new Vector2(rigidbody.mass * 10f, 0), ForceMode2D.Impulse);
             }
 
         }
@@ -137,5 +170,8 @@ public class Player : Character
         }
 
     }
-    
+    public void setLastCheckpoint(Vector2 pos)
+    {
+        lastCheckpoint = pos;
+    }
 }

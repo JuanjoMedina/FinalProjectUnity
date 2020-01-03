@@ -15,19 +15,19 @@ public class DamageTrigger : MonoBehaviour
         if (type.Equals("Player"))
         {
             if (collision.gameObject.tag.Equals("Enemy"))
-                character.damage(20f);
+                character.Damage(20f);
         }
         if (type.Equals("Enemy"))
         {
             if (collision.gameObject.tag.Equals("Player"))
             {
-                character.damage(20f);
+                character.Damage(20f);
             }
 
             if(collision.gameObject.tag.Equals("Shot"))
             {
                 Destroy(collision.gameObject);
-                character.damage(20);
+                character.Damage(20);
             }
         }
         if (type.Equals("Turret"))
@@ -36,7 +36,7 @@ public class DamageTrigger : MonoBehaviour
             if (collision.gameObject.tag.Equals("Shot"))
             {
                 Destroy(collision.gameObject);
-                character.damage(20);
+                character.Damage(20);
             }
         }
 
