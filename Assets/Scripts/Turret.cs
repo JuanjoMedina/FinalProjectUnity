@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Turret : Character
 {
-    private float health;
     private Animator animator;
     private bool dead;
 
@@ -12,7 +11,7 @@ public class Turret : Character
     void Awake()
     {
         dead = false;
-        health = 200f;
+        Health = 200f;
         animator = GetComponent<Animator>();
     }
 
@@ -23,11 +22,11 @@ public class Turret : Character
     }
     public override void Damage(float damage)
     {
-        health -= 20;
+        Health -= 20;
     }
     void checkIfDead()
     {
-        if(health<=0 && !dead)
+        if(Health<=0 && !dead)
         {
             animator.SetTrigger("Death");
             dead = true;

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Enemy : Character
 {
-    private float health;
     private float frames_blocked;
     private bool dead;
     private Animator animator;
@@ -14,7 +13,7 @@ public class Enemy : Character
     // Start is called before the first frame update
     void Awake()
     {
-        health = 80f;
+        Health = 80f;
         dead = false;
         rigidbody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
@@ -35,11 +34,11 @@ public class Enemy : Character
     }
     public override void Damage(float damage)
     {
-        health -= 20;
+        Health -= 20;
     }
     private void CheckIfDead()
     {
-        if (health <= 0)
+        if (Health <= 0)
         {
             dead = true;
             rigidbody.velocity = new Vector2(0, 0);

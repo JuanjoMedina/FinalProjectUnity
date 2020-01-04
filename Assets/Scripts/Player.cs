@@ -11,7 +11,6 @@ public class Player : Character
 
     public GameObject ammo;
 
-    private float health;
     private Animator animator;
     private BoxCollider2D BoxCollider2D;
     private Rigidbody2D Rigidbody;
@@ -39,7 +38,7 @@ public class Player : Character
 
     void Start()
     {
-        health = 100f;
+        Health = 100f;
         dead = false;
         jetpack = false;
         this.transform.position = lastCheckpoint;
@@ -88,7 +87,7 @@ public class Player : Character
 
     public override void Damage(float damage)
     {
-        health -= damage;
+        Health -= damage;
         animator.SetTrigger("Damage");
     }
     private void inputPC()
@@ -163,7 +162,7 @@ public class Player : Character
 
     private void checkIfDead()
     {
-        if (health <= 0)
+        if (Health <= 0)
         {
             animator.SetTrigger("Death");
             dead = true;
