@@ -17,6 +17,8 @@ public class Player : Character
     private bool jetpack;
     private bool walking;
     private bool dead;
+    private bool hasShot;
+    private bool shooting;
 
 
     // Start is called before the first frame update
@@ -39,6 +41,8 @@ public class Player : Character
 
     void Start()
     {
+        shooting = false;
+        hasShot = true;
         Health = 100;
         dead = false;
         jetpack = false;
@@ -75,15 +79,22 @@ public class Player : Character
                 animator.SetTrigger("Resurrect");
             }
         }
+        if(animator.GetCurrentAnimatorStateInfo(0).IsName("Shoot") && !hasShot)
+        {
+            fire();
+            hasShot = true;
+        }
+        else if (shooting && !animator.GetCurrentAnimatorStateInfo(0).IsName("Shoot") && !animator.GetCurrentAnimatorStateInfo(0).IsName("Start_shooting") && !animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        {
+            fire();
+            shooting = false;
+        }
 
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Walk") && !animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
-        {
             animator.SetTrigger("Jetpack_Stop");
             jetpack = false;
-        }
     }
 
     public override void Damage(float damage)
@@ -133,31 +144,13 @@ public class Player : Character
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (!jetpack)
+            if (!jetpack && hasShot && !animator.GetCurrentAnimatorStateInfo(0).IsName("Walk") && !animator.GetCurrentAnimatorStateInfo(0).IsName("Jetpack_Stop"))
             {
                 animator.SetTrigger("Shoot");
-            }
-
-            if (transform.localScale.x < 0)
-            {
-                Vector3 pos = transform.position;
-                pos.x -= 0.5f;
-                GameObject AmoFired = Instantiate(ammo, pos, Quaternion.identity);
-                Rigidbody2D rigidbody = AmoFired.GetComponent<Rigidbody2D>();
-                AmoFired.transform.localScale = new Vector3(AmoFired.transform.localScale.x * -1, AmoFired.transform.localScale.y, transform.localScale.z);
-                rigidbody.velocity = Rigidbody.velocity;
-                rigidbody.AddForce(new Vector2(-rigidbody.mass * 10f, 0), ForceMode2D.Impulse);
+                hasShot = false;
             }
             else
-            {
-                Vector3 pos = transform.position;
-                pos.x += 0.5f;
-                GameObject AmoFired = Instantiate(ammo, pos, Quaternion.identity);
-                Rigidbody2D rigidbody = AmoFired.GetComponent<Rigidbody2D>();
-                rigidbody.velocity = Rigidbody.velocity;
-                rigidbody.AddForce(new Vector2(rigidbody.mass * 10f, 0), ForceMode2D.Impulse);
-            }
-
+                shooting = true;
         }
     }
 
@@ -173,5 +166,27 @@ public class Player : Character
     public void setLastCheckpoint(Vector2 pos)
     {
         lastCheckpoint = pos;
+    }
+    private void fire()
+    {
+        if (transform.localScale.x < 0)
+        {
+            Vector3 pos = transform.position;
+            pos.x -= 0.5f;
+            GameObject AmoFired = Instantiate(ammo, pos, Quaternion.identity);
+            Rigidbody2D rigidbody = AmoFired.GetComponent<Rigidbody2D>();
+            AmoFired.transform.localScale = new Vector3(AmoFired.transform.localScale.x * -1, AmoFired.transform.localScale.y, transform.localScale.z);
+            rigidbody.velocity = Rigidbody.velocity;
+            rigidbody.AddForce(new Vector2(-rigidbody.mass * 10f, 0), ForceMode2D.Impulse);
+        }
+        else
+        {
+            Vector3 pos = transform.position;
+            pos.x += 0.5f;
+            GameObject AmoFired = Instantiate(ammo, pos, Quaternion.identity);
+            Rigidbody2D rigidbody = AmoFired.GetComponent<Rigidbody2D>();
+            rigidbody.velocity = Rigidbody.velocity;
+            rigidbody.AddForce(new Vector2(rigidbody.mass * 10f, 0), ForceMode2D.Impulse);
+        }
     }
 }

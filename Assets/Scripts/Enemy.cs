@@ -85,4 +85,8 @@ public class Enemy : Character
             }
         }
     }
+    public bool getDead()
+    {
+        return dead;
+    }
 }
