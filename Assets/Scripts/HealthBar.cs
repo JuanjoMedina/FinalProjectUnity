@@ -10,6 +10,8 @@ public class HealthBar : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (healthObject == null)
+            healthObject = GameObject.FindGameObjectWithTag("Player");
         MaxHealth = ((Character)healthObject.GetComponent<MonoBehaviour>()).Health;
     }
 
@@ -18,6 +20,8 @@ public class HealthBar : MonoBehaviour
     {
         Vector3 scale = transform.localScale;
         scale.x = ((Character)healthObject.GetComponent<MonoBehaviour>()).Health/MaxHealth;
+        if (scale.x < 0)
+            scale.x = 0;
         transform.localScale = scale;
     }
 }

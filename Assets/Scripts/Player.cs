@@ -34,11 +34,12 @@ public class Player : Character
         this.BoxCollider2D = GetComponent<BoxCollider2D>();
         this.animator = GetComponent<Animator>();
         lastCheckpoint = transform.position;
+        Health = 100f;
     }
 
     void Start()
     {
-        Health = 100f;
+        Health = 100;
         dead = false;
         jetpack = false;
         this.transform.position = lastCheckpoint;
