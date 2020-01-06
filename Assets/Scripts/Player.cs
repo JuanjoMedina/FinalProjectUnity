@@ -65,6 +65,17 @@ public class Player : Character
         if (!dead)
         {
             triggerFire();
+
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Shoot") && !hasShot)
+            {
+                fire();
+                hasShot = true;
+            }
+            else if (shooting && !animator.GetCurrentAnimatorStateInfo(0).IsName("Shoot") && !animator.GetCurrentAnimatorStateInfo(0).IsName("Start_shooting") && !animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+            {
+                fire();
+                shooting = false;
+            }
         }
 
         if (player.dead)
@@ -79,22 +90,17 @@ public class Player : Character
                 animator.SetTrigger("Resurrect");
             }
         }
-        if(animator.GetCurrentAnimatorStateInfo(0).IsName("Shoot") && !hasShot)
-        {
-            fire();
-            hasShot = true;
-        }
-        else if (shooting && !animator.GetCurrentAnimatorStateInfo(0).IsName("Shoot") && !animator.GetCurrentAnimatorStateInfo(0).IsName("Start_shooting") && !animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
-        {
-            fire();
-            shooting = false;
-        }
+
 
     }
-    private void OnTriggerStay2D(Collider2D collision)
+    private void OnCollisionStay2D(Collision2D collision)
     {
+        if (collision.GetContact(0).point.y - transform.position.y < -0.5 && animator.GetCurrentAnimatorStateInfo(0).IsName("Jetpack_Start"))
+        {
+            animator.SetBool("Jetpack_Start", false);
             animator.SetTrigger("Jetpack_Stop");
             jetpack = false;
+        }
     }
 
     public override void Damage(float damage)
@@ -144,10 +150,13 @@ public class Player : Character
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (!jetpack && hasShot && !animator.GetCurrentAnimatorStateInfo(0).IsName("Walk") && !animator.GetCurrentAnimatorStateInfo(0).IsName("Jetpack_Stop"))
+            if (!jetpack && !animator.GetCurrentAnimatorStateInfo(0).IsName("Walk") && !animator.GetCurrentAnimatorStateInfo(0).IsName("Jetpack_Stop"))
             {
-                animator.SetTrigger("Shoot");
-                hasShot = false;
+                if (hasShot)
+                {
+                    animator.SetTrigger("Shoot");
+                    hasShot = false;
+                }
             }
             else
                 shooting = true;

@@ -5,7 +5,6 @@ using UnityEngine;
 public class AutodestroyIfKilled : MonoBehaviour
 {
     public GameObject[] killedObjects;
-    private GameObject hola = null;
     // Update is called once per frame
     void Update()
     {

@@ -16,6 +16,12 @@ public class DamageTrigger : MonoBehaviour
         {
             if (collision.gameObject.tag.Equals("Enemy"))
                 character.Damage(20f);
+            if (collision.gameObject.tag.Equals("EnemyShot"))
+            {
+                Destroy(collision.gameObject);
+                character.Damage(20f);
+            }
+
         }
         if (type.Equals("Enemy"))
         {
