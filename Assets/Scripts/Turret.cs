@@ -53,13 +53,21 @@ public class Turret : Character
     void shoot()
     {
         Vector3 pos=transform.position;
-        pos.x -= 0.1f;
-        GameObject shot = Instantiate(Shot, pos, Quaternion.identity);
-        Rigidbody2D rigidbody= shot.GetComponent<Rigidbody2D>();
-        if (transform.localScale.x>0)
-            rigidbody.AddForce(new Vector2(-10, 0),ForceMode2D.Impulse);
+        pos.y += 0.2f;
+        if (transform.localScale.x > 0)
+        {
+            pos.x -= 0.7f;
+            GameObject shot = Instantiate(Shot, pos, Quaternion.identity);
+            Rigidbody2D rigidbody = shot.GetComponent<Rigidbody2D>();
+            rigidbody.AddForce(new Vector2(-10, 0), ForceMode2D.Impulse);
+        }
         else
+        {
+            pos.x += 0.7f;
+            GameObject shot = Instantiate(Shot, pos, Quaternion.identity);
+            Rigidbody2D rigidbody = shot.GetComponent<Rigidbody2D>();
             rigidbody.AddForce(new Vector2(10, 0), ForceMode2D.Impulse);
+        }
 
     }
 }

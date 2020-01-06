@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4752905390259241799}
   - component: {fileID: 5546508156462936995}
   - component: {fileID: -7238718018418837493}
+  - component: {fileID: 8992024818611268550}
   m_Layer: 0
   m_Name: Turret Shot
   m_TagString: EnemyShot
@@ -150,3 +151,15 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
+--- !u!114 &8992024818611268550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1981549527198452637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3930802647c002b44bccb82f03bf8dc9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
