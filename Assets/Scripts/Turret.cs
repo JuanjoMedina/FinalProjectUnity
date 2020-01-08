@@ -8,6 +8,11 @@ public class Turret : Character
     private Animator animator;
     private bool dead;
     private float timer;
+    private int shotNum;
+    private int numOfShots;
+    private int numOfPause;
+    private bool detected;
+    private bool shooting;
 
     // Start is called before the first frame update
     void Awake()
@@ -16,6 +21,11 @@ public class Turret : Character
         Health = 200f;
         animator = GetComponent<Animator>();
         timer = 0;
+        shotNum = 0;
+        detected = false;
+        shooting = true;
+        numOfShots = 8;
+        numOfPause = 4;
     }
 
     // Update is called once per frame
@@ -23,16 +33,46 @@ public class Turret : Character
     {
         float distance = GameObject.FindGameObjectWithTag("Player").transform.position.x - transform.position.x;
         if (!dead && Mathf.Abs(distance) < 10)
+        {
+            if (!detected)
+            {
+                detected = true;
+                animator.SetTrigger("Shoot");
+            }
             if (timer > 0.5)
             {
-                animator.SetTrigger("Shoot");
+                shotNum++;
                 timer = 0;
-                shoot();
+                if (shooting)
+                {
+                    shoot();
+                }
+                if (shotNum == numOfShots && shooting)
+                {
+                    shooting = false;
+                    animator.SetTrigger("Stop_Shooting");
+                    shotNum = 0;
+                }
+                else if (shotNum == numOfPause && !shooting)
+                {
+                    shooting = true;
+                    animator.SetTrigger("Shoot");
+                    shotNum = 0;
+                }
+                
             }
             else
                 timer += Time.deltaTime;
+        }
         else
-            animator.SetTrigger("Stop_Shooting");
+        {
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Shoot"))
+                animator.SetTrigger("Stop_Shooting");
+            detected = false;
+            shooting = true;
+            timer = 0;
+            shotNum = 0;
+        }
     }
     void FixedUpdate()
     {

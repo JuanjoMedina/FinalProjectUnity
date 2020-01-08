@@ -150,7 +150,7 @@ public class Player : Character
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (!jetpack && !animator.GetCurrentAnimatorStateInfo(0).IsName("Walk") && !animator.GetCurrentAnimatorStateInfo(0).IsName("Jetpack_Stop"))
+            if (!jetpack && !animator.GetCurrentAnimatorStateInfo(0).IsName("Walk") && !animator.GetCurrentAnimatorStateInfo(0).IsName("Jetpack_Stop") && !animator.GetCurrentAnimatorStateInfo(0).IsName("Damage"))
             {
                 if (hasShot)
                 {

@@ -27,7 +27,7 @@ public class Enemy : Character
             CheckIfDead();
             if (!dead)
             {
-                //TryToCatch();
+                TryToCatch();
             }
         }
 
