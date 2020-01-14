@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7307648518946579785}
   - component: {fileID: 8758979980142012507}
   m_Layer: 0
-  m_Name: Enemy DamageTrigger
+  m_Name: EnemyDamageTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

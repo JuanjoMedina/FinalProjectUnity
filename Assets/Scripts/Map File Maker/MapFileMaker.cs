@@ -11,6 +11,11 @@ public class MapFileMaker : MonoBehaviour
     void Start()
     {
         GameObject[] gameObjects = SceneManager.GetActiveScene().GetRootGameObjects();
+        GameObject[] gameObjects1 = GameObject.FindGameObjectWithTag("Player").scene.GetRootGameObjects();
+        List<GameObject> list = new List<GameObject>();
+        list.AddRange(gameObjects);
+        list.AddRange(gameObjects1);
+        gameObjects = list.ToArray();
         StreamWriter streamWriter = new StreamWriter("NewMap.txt");
 
         foreach (GameObject go in gameObjects)

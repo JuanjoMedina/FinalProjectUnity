@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -7238718018418837493}
   - component: {fileID: 8992024818611268550}
   m_Layer: 0
-  m_Name: Turret Shot
+  m_Name: TurretShot
   m_TagString: EnemyShot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
