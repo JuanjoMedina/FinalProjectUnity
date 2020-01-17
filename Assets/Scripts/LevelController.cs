@@ -6,7 +6,10 @@ using UnityEngine.SceneManagement;
 public class LevelController : MonoBehaviour
 {
     public int index;
-    public string levelName;
+
+    public float xPosition;
+    public float yPosition;
+    public float zPosition;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +25,7 @@ public class LevelController : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
+            collision.transform.position = new Vector3(xPosition, yPosition, zPosition);
             DontDestroyOnLoad(this.gameObject);
             SceneManager.LoadScene(index);
             //SceneManager.LoadScene(levelName);
