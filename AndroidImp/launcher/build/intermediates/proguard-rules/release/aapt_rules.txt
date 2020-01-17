@@ -1,0 +1,2 @@
+# Referenced at C:\Users\ivanl\Desktop\EETAC\Version_final\FinalProjectUnity\AndroidImp\launcher\build\intermediates\merged_manifests\release\AndroidManifest.xml:37
+-keep class com.unity3d.player.UnityPlayerActivity { <init>(); }
