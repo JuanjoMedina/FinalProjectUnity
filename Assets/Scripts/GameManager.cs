@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator downloadMap()
     {
-        UnityWebRequest www = UnityWebRequest.Get("http://147.83.7.206:8080/dsaApp/maps");
+        UnityWebRequest www = UnityWebRequest.Get("http://147.83.7.206:8080/dsaApp/map/1");
         yield return www.SendWebRequest();
 
         if (www.isNetworkError || www.isHttpError)
@@ -43,7 +43,8 @@ public class GameManager : MonoBehaviour
         {
             // Show results as text
             string a = www.downloadHandler.text;
-            Assets.Scripts.Api_Classes.Map[] mapa = JsonUtility.FromJson<Assets.Scripts.Api_Classes.Map[]>(www.downloadHandler.text);
+            string b =JsonUtility.ToJson(new Assets.Scripts.Api_Classes.Map(2, "hola\r\nquetal"));
+            loadMap(JsonUtility.FromJson<Assets.Scripts.Api_Classes.Map>(www.downloadHandler.text).data);
 
         }
     }
@@ -54,26 +55,29 @@ public class GameManager : MonoBehaviour
         List<string[][]> relationVec = new List<string[][]>();
         foreach (string text in lineas)
         {
-            string[] objectString = text.Split(' ');
-            GameObject go = AssetDatabase.LoadAssetAtPath("Assets/Prefabs/" + objectString[0].Split('(')[0] + ".prefab", typeof(UnityEngine.Object)) as GameObject;
-            GameObject instance = Instantiate(go, new Vector3(float.Parse(objectString[1]), float.Parse(objectString[2]), float.Parse(objectString[3])), Quaternion.Euler(new Vector3(float.Parse(objectString[7]), float.Parse(objectString[8]), float.Parse(objectString[9]))));
-            instance.name = objectString[0];
-            instance.transform.localScale = new Vector3(float.Parse(objectString[4]), float.Parse(objectString[5]), float.Parse(objectString[6]));
-            if (objectString.Length > 10)
+            if (!text.Equals(""))
             {
-                instance.AddComponent<AutodestroyIfKilled>();
-                if (instance.GetComponent<MonoBehaviour>().GetType().Name.Equals("AutodestroyIfKilled"))
+                string[] objectString = text.Split(' ');
+                GameObject go = AssetDatabase.LoadAssetAtPath("Assets/Prefabs/" + objectString[0].Split('(')[0] + ".prefab", typeof(UnityEngine.Object)) as GameObject;
+                GameObject instance = Instantiate(go, new Vector3(float.Parse(objectString[1]), float.Parse(objectString[2]), float.Parse(objectString[3])), Quaternion.Euler(new Vector3(float.Parse(objectString[7]), float.Parse(objectString[8]), float.Parse(objectString[9]))));
+                instance.name = objectString[0];
+                instance.transform.localScale = new Vector3(float.Parse(objectString[4]), float.Parse(objectString[5]), float.Parse(objectString[6]));
+                if (objectString.Length > 10)
                 {
-                    AutodestroyIfKilled script = instance.GetComponent<MonoBehaviour>() as AutodestroyIfKilled;
-                    relationVec.Add(new string[2][]);
-                    relationVec[relationVec.Count - 1][0] = new string[1] { objectString[0] };
-                    relationVec[relationVec.Count - 1][1] = new string[objectString.Length - 10];
-                    for (int i = 10; i < objectString.Length; i++)
+                    instance.AddComponent<AutodestroyIfKilled>();
+                    if (instance.GetComponent<MonoBehaviour>().GetType().Name.Equals("AutodestroyIfKilled"))
                     {
-                        relationVec[0][1][i - 10] = objectString[i];
+                        AutodestroyIfKilled script = instance.GetComponent<MonoBehaviour>() as AutodestroyIfKilled;
+                        relationVec.Add(new string[2][]);
+                        relationVec[relationVec.Count - 1][0] = new string[1] { objectString[0] };
+                        relationVec[relationVec.Count - 1][1] = new string[objectString.Length - 10];
+                        for (int i = 10; i < objectString.Length; i++)
+                        {
+                            relationVec[0][1][i - 10] = objectString[i];
+                        }
                     }
-                }
 
+                }
             }
 
         }

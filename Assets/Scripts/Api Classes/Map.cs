@@ -9,10 +9,13 @@ namespace Assets.Scripts.Api_Classes
     [Serializable]
     public class Map
     {
-        string name;
-        string data;
+        public int name;
+        public string data;
 
-        public string Name { get => name; set => name = value; }
-        public string Data { get => data; set => data = value; }
+        public Map(int n, string a)
+        {
+            this.data = a;
+            this.name = n;
+        }
     }
 }
