@@ -15029,6 +15029,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ScreenLoadCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 7968734878397422836, guid: f9b397c6c0c1088489e14d4602e85bca,
+        type: 3}
+      propertyPath: m_Text
+      value: Survive
+      objectReference: {fileID: 0}
     - target: {fileID: 7968734878821148652, guid: f9b397c6c0c1088489e14d4602e85bca,
         type: 3}
       propertyPath: m_Text
