@@ -11,6 +11,11 @@ public class MapFileMaker : MonoBehaviour
     void Start()
     {
         GameObject[] gameObjects = SceneManager.GetActiveScene().GetRootGameObjects();
+        GameObject[] gameObjects1 = GameObject.FindGameObjectWithTag("Player").scene.GetRootGameObjects();
+        List<GameObject> list = new List<GameObject>();
+        list.AddRange(gameObjects);
+        list.AddRange(gameObjects1);
+        gameObjects = list.ToArray();
         StreamWriter streamWriter = new StreamWriter("NewMap.txt");
 
         foreach (GameObject go in gameObjects)
@@ -33,8 +38,8 @@ public class MapFileMaker : MonoBehaviour
                 streamWriter.Write(gameObjectName + " " + go.transform.position.x.ToString() + " " +
                     go.transform.position.y.ToString() + " " + go.transform.position.z.ToString() + " " +
                     go.transform.localScale.x.ToString() + " " + go.transform.localScale.y.ToString() + " " +
-                    go.transform.localScale.z.ToString() + " " + go.transform.rotation.x.ToString() + " " +
-                    go.transform.rotation.y.ToString() + " " + go.transform.rotation.z.ToString());
+                    go.transform.localScale.z.ToString() + " " + go.transform.rotation.eulerAngles.x.ToString() + " " +
+                    go.transform.rotation.eulerAngles.y.ToString() + " " + go.transform.rotation.eulerAngles.z.ToString());
 
                 foreach (string target in targets)
                     streamWriter.Write(" " + target);

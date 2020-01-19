@@ -5,10 +5,16 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
     path: Assets/Scenes/New_Test_Environment.unity
     guid: 47d895442cbe72547971d5950a84fa57
+  - enabled: 1
+    path: Assets/Scenes/Firsy_boss.unity
+    guid: 69fc7f0fafb48ff4aac651763c20eff9
+  - enabled: 1
+    path: Assets/Scenes/Test_Environment2.unity
+    guid: 8e9cebd63bccad249b01a93eef12a6e2
   m_configObjects: {}

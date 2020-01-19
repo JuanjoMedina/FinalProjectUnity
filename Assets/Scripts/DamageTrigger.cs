@@ -5,7 +5,7 @@ using UnityEngine;
 public class DamageTrigger : MonoBehaviour
 {
     private Character character;
-    void Start()
+    void Awake()
     {
         character=(Character)transform.parent.GetComponent<MonoBehaviour>();
     }
