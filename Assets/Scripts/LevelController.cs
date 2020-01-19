@@ -29,7 +29,6 @@ public class LevelController : MonoBehaviour
     {
         yield return new WaitForSeconds(2.0f);
         collision.transform.position = new Vector3(xPosition, yPosition, zPosition);
-        //DontDestroyOnLoad(this.gameObject);
         SceneManager.LoadScene(index);
         DontDestroyOnLoad(collision.gameObject);
     }

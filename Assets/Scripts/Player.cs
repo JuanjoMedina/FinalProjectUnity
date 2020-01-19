@@ -108,6 +108,12 @@ public class Player : Character
         Health -= damage;
         animator.SetTrigger("Damage");
     }
+
+    public void cigarHealth()
+    {
+        Health += 10;
+    }
+
     private void inputPC()
     {
         walking = false;
