@@ -31,7 +31,7 @@ public class LevelController : MonoBehaviour
         collision.transform.position = new Vector3(xPosition, yPosition, zPosition);
         //DontDestroyOnLoad(this.gameObject);
         SceneManager.LoadScene(index);
-        Destroy(collision.gameObject);
+        DontDestroyOnLoad(collision.gameObject);
     }
 
     void OnTriggerEnter2D(Collider2D collision)
