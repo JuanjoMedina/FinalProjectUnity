@@ -17,7 +17,14 @@ public class Checkpoint : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag=="Player")
+        if (collision.tag == "Player")
+        {
             ((Player)GameObject.FindGameObjectWithTag("Player").GetComponent<MonoBehaviour>()).setLastCheckpoint(transform.position);
+            Assets.Scripts.Api_Classes.User usuario = GameManager.gameManager.usuario;
+            usuario.xPos = (int) transform.position.x;
+            usuario.yPos = (int) transform.position.y;
+            GameManager.gameManager.startUpdateProgress();
+        }
+            
     }
 }

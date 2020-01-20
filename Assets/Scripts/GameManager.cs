@@ -5,12 +5,21 @@ using System;
 using System.Net.Http;
 using UnityEngine.Networking;
 using UnityEditor;
+using Assets.Scripts.Api_Classes;
 
 public class GameManager : MonoBehaviour
 {
-    private static GameManager gameManager;
+    public static GameManager gameManager;
     private int currentMap;
+    private string current_map_data;
     private static HttpClient client = new HttpClient();
+    private bool initialize = false;
+    private bool loaded;
+    private GameObject player;
+    public User usuario;
+
+    public int CurrentMap { get => currentMap; set => currentMap = value; }
+    public string Current_map_data { get => current_map_data; set => current_map_data = value; }
 
     void Awake()
     {
@@ -18,21 +27,48 @@ public class GameManager : MonoBehaviour
         {
             gameManager = this;
             DontDestroyOnLoad(this);
+            try
+            {
+                StartCoroutine(getUser());
+                StartCoroutine(getCurrentProgress());
+            }
+            catch
+            {
+                Debug.Log("Connection Error");
+            }
         }
         else
             Destroy(gameObject);
-        StartCoroutine(downloadMap());
+
+    }
+    private void Start()
+    {
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (initialize)
+        {
+            StartCoroutine(downloadMap());
+            initialize = false;
+        }
+        if (loaded)
+        {
+            player.transform.position = new Vector3(usuario.xPos, usuario.yPos, usuario.zPos);
+            ((Player)player.GetComponent<MonoBehaviour>()).setLastCheckpoint(new Vector2(usuario.xPos, usuario.yPos));
+            loaded = false;
+        }
+            
     }
-
-    private IEnumerator downloadMap()
+    public void startDownloading()
     {
-        UnityWebRequest www = UnityWebRequest.Get("http://147.83.7.206:8080/dsaApp/map/1");
+        StartCoroutine(downloadMap());
+    }
+    public IEnumerator downloadMap()
+    {
+        UnityWebRequest www = UnityWebRequest.Get("http://147.83.7.206:8080/dsaApp/map/"+currentMap.ToString());
         yield return www.SendWebRequest();
 
         if (www.isNetworkError || www.isHttpError)
@@ -41,15 +77,30 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            // Show results as text
-            string a = www.downloadHandler.text;
-            string b =JsonUtility.ToJson(new Assets.Scripts.Api_Classes.Map(2, "hola\r\nquetal"));
-            loadMap(JsonUtility.FromJson<Assets.Scripts.Api_Classes.Map>(www.downloadHandler.text).data);
+            Current_map_data = JsonUtility.FromJson<Map>(www.downloadHandler.text).data;
+            loadMap(Current_map_data);
+            loaded = true;
+        }
+    }
+    public IEnumerator getCurrentProgress()
+    {
+        UnityWebRequest www = UnityWebRequest.Get("http://147.83.7.206:8080/dsaApp/getPosition/pcf3333");
+        yield return www.SendWebRequest();
+
+        if (www.isNetworkError || www.isHttpError)
+        {
+            Debug.Log(www.error);
+        }
+        else
+        {
+            CurrentProgress curr=JsonUtility.FromJson<CurrentProgress>(www.downloadHandler.text);
+            CurrentMap = curr.lastMap;
+            initialize = true;
 
         }
     }
 
-    private void loadMap(string map)
+    public void loadMap(string map)
     {
         string[] lineas = map.Split(new string[] { "\r\n" }, StringSplitOptions.None);
         List<string[][]> relationVec = new List<string[][]>();
@@ -92,6 +143,36 @@ public class GameManager : MonoBehaviour
         }
 
         ((Camera)GameObject.FindGameObjectWithTag("MainCamera").GetComponent<MonoBehaviour>()).player = GameObject.FindGameObjectWithTag("Player");
+    }
+
+    public IEnumerator updateProgress()
+    {
+        UnityWebRequest www = UnityWebRequest.Put("http://147.83.7.206:8080/dsaApp/modifyUser", System.Text.Encoding.UTF8.GetBytes(JsonUtility.ToJson(usuario)));
+        yield return www.SendWebRequest();
+
+        if (www.isNetworkError || www.isHttpError)
+        {
+            Debug.Log(www.error);
+        }
+
+    }
+    private IEnumerator getUser()
+    {
+        UnityWebRequest www = UnityWebRequest.Get("http://147.83.7.206:8080/dsaApp/users/pcf3333");
+        yield return www.SendWebRequest();
+
+        if (www.isNetworkError || www.isHttpError)
+        {
+            Debug.Log(www.error);
+        }
+        else
+        {
+            usuario = JsonUtility.FromJson<User>(www.downloadHandler.text);
+        }
+    }
+    public void startUpdateProgress()
+    {
+        StartCoroutine(updateProgress());
     }
 
 }

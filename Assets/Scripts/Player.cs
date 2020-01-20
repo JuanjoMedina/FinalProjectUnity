@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityStandardAssets.CrossPlatformInput;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,6 +9,8 @@ public class Player : Character
     private static Player player;
     private Vector3 lastCheckpoint;
     private float reloadTime;
+    private float dirX;
+    private float dirY;
 
     public GameObject ammo;
 
@@ -55,7 +58,8 @@ public class Player : Character
     {
         if (!dead)
         {
-            inputPC();
+            TouchControls();
+            //inputPC();
             checkIfDead();
         }
 
@@ -84,10 +88,12 @@ public class Player : Character
             if (reloadTime >=3f)
             {
                 reloadTime = 0;
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                foreach (GameObject go in SceneManager.GetActiveScene().GetRootGameObjects())
+                    Destroy(go);
                 Start();
                 animator.SetBool("Damage", false);
                 animator.SetTrigger("Resurrect");
+                GameManager.gameManager.loadMap(GameManager.gameManager.Current_map_data);
             }
         }
 
@@ -198,4 +204,66 @@ public class Player : Character
             rigidbody.AddForce(new Vector2(rigidbody.mass * 10f, 0), ForceMode2D.Impulse);
         }
     }
+    public void TouchControls()
+    {
+        walking = false;
+        dirX = CrossPlatformInputManager.GetAxis("Horizontal");
+        dirY = CrossPlatformInputManager.GetAxis("Vertical");
+        if (dirX > 0f)
+        {
+            if (!jetpack)
+            {
+
+                animator.SetTrigger("Walk");
+                animator.SetBool("Jetpack_Start", false);
+                animator.SetBool("Jetpack_Stop", false);
+                walking = true;
+            }
+            this.Rigidbody.AddRelativeForce(new Vector2(Rigidbody.mass * 9.81f * 0.6f, 0), ForceMode2D.Force);
+            this.transform.localScale = new Vector2(0.14f, 0.14f);
+
+        }
+
+        if (dirX < 0f)
+        {
+            if (!jetpack)
+            {
+
+                animator.SetTrigger("Walk");
+                animator.SetBool("Jetpack_Start", false);
+                animator.SetBool("Jetpack_Stop", false);
+                walking = true;
+            }
+            this.Rigidbody.AddRelativeForce(new Vector2(Rigidbody.mass * 9.81f * -0.6f, 0), ForceMode2D.Force);
+            this.transform.localScale = new Vector2(-0.14f, 0.14f);
+
+        }
+        if (dirY > 0f)
+        {
+
+            this.Rigidbody.AddRelativeForce(new Vector2(0, Rigidbody.mass * 11), ForceMode2D.Force);
+            animator.SetTrigger("Jetpack_Start");
+            jetpack = true;
+        }
+        else if (!walking && animator.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
+        {
+            animator.SetTrigger("Stop_Walking");
+        }
+
+        if (CrossPlatformInputManager.GetButtonUp("Shoot") || CrossPlatformInputManager.GetButtonDown("Shoot"))
+        {
+            if (!jetpack && !animator.GetCurrentAnimatorStateInfo(0).IsName("Walk") && !animator.GetCurrentAnimatorStateInfo(0).IsName("Jetpack_Stop") && !animator.GetCurrentAnimatorStateInfo(0).IsName("Damage"))
+            {
+                if (hasShot)
+                {
+                    animator.SetTrigger("Shoot");
+                    hasShot = false;
+                }
+            }
+            else
+                shooting = true;
+        }
+
+    }
+    
 }

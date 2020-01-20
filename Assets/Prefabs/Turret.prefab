@@ -52,6 +52,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -303,6 +304,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8777309520474795141}
     m_Modifications:
+    - target: {fileID: 7307648518946579785, guid: 820f48afb786c6e46a25cc5b7b6faed5,
+        type: 3}
+      propertyPath: m_Offset.x
+      value: 0.0109062195
+      objectReference: {fileID: 0}
+    - target: {fileID: 7307648518946579785, guid: 820f48afb786c6e46a25cc5b7b6faed5,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 1.0405118
+      objectReference: {fileID: 0}
+    - target: {fileID: 7307648518946579785, guid: 820f48afb786c6e46a25cc5b7b6faed5,
+        type: 3}
+      propertyPath: m_Offset.y
+      value: 0.0061427355
+      objectReference: {fileID: 0}
+    - target: {fileID: 7307648518946579785, guid: 820f48afb786c6e46a25cc5b7b6faed5,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 1.0307144
+      objectReference: {fileID: 0}
     - target: {fileID: 7307648518946579786, guid: 820f48afb786c6e46a25cc5b7b6faed5,
         type: 3}
       propertyPath: m_LocalPosition.x

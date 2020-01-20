@@ -5,8 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class LevelController : MonoBehaviour
 {
-    public int index;
-
     private Animator animator;
     // Start is called before the first frame update
     void Start()
@@ -22,9 +20,15 @@ public class LevelController : MonoBehaviour
     IEnumerator delayCoroutine(Collider2D collision)
     {
         yield return new WaitForSeconds(2.0f);
-        collision.transform.position = new Vector3(0, 0, 0);
-        ((Player)collision.GetComponent<MonoBehaviour>()).setLastCheckpoint(new Vector2(0, 0));
-        SceneManager.LoadScene(index);
+        GameManager.gameManager.CurrentMap += 1;
+        foreach (GameObject go in SceneManager.GetActiveScene().GetRootGameObjects())
+            Destroy(go);
+        GameManager.gameManager.startDownloading();
+        Assets.Scripts.Api_Classes.User usuario = GameManager.gameManager.usuario;
+        usuario.xPos = 0;
+        usuario.yPos = 0;
+        usuario.zPos = 0;
+        GameManager.gameManager.startUpdateProgress();
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -33,8 +37,6 @@ public class LevelController : MonoBehaviour
         {
             animator.Play("exit");
             StartCoroutine(delayCoroutine(collision));
-
-            //SceneManager.LoadScene(levelName);
         }
     }
 }

@@ -23,7 +23,7 @@ public class MapFileMaker : MonoBehaviour
             string gameObjectName = go.name.Replace(" ","");
             //string gameObjectName = a.Split(new string[] { " (" },System.StringSplitOptions.None)[0];
             List<string> targets = new List<string>(); 
-            if (!gameObjectName.Equals("MapFileMaker")) {
+            if (!gameObjectName.Equals("MapFileMaker") && !gameObjectName.Equals("Player")) {
                 foreach (MonoBehaviour script in go.GetComponents<MonoBehaviour>())
                 {
                     if (script.GetType().Name.Equals("AutodestroyIfKilled"))
